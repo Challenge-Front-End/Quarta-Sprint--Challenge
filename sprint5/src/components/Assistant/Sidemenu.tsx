@@ -24,30 +24,42 @@ export default function SideMenu({ user, onClose, onLogout }: SideMenuProps) {
 
   return (
     <>
-      
-      <div className="menu-backdrop" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-black/20 z-20"
+        onClick={onClose}
+      />
 
-      
-      <div className="side-menu">
-        <div className="menu-header">
-          <span>Menu</span>
+      <div className="fixed top-0 left-0 h-full w-[220px] bg-gray-200 z-30 flex flex-col animate-slideIn">
+
+        <div className="p-6 flex items-center">
+          <span className="text-lg font-medium">Menu</span>
         </div>
 
-        <div className="menu-content">
-          <div className="user-info">
-            <p className="user-name">Bem-vindo, {user.name}</p>
-            <p className="user-email">{user.email}</p>
+
+        <div className="p-6 flex flex-col gap-4">
+          <div className="text-sm">
+            <p className="font-medium">Bem-vindo, {user.name}</p>
+            <p className="text-gray-500">{user.email}</p>
           </div>
 
-          <button className="menu-button-item" onClick={navigateToTeam}>
+          <button
+            onClick={navigateToTeam}
+            className="bg-gray-300 text-gray-800 px-6 py-2 rounded-full w-full text-center font-medium hover:bg-gray-400"
+          >
             Equipe
           </button>
 
-          <button className="back-button" onClick={onClose}>
+          <button
+            onClick={onClose}
+            className="bg-gray-300 text-gray-800 px-6 py-2 rounded-full w-full text-center hover:bg-gray-400"
+          >
             Voltar
           </button>
 
-          <button className="logout-button" onClick={onLogout}>
+          <button
+            onClick={onLogout}
+            className="bg-red-700 text-white px-6 py-2 rounded-full w-full text-center hover:bg-red-800"
+          >
             Sair
           </button>
         </div>

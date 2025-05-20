@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import TopNav from "./TopNav"
 import SideMenu from "./Sidemenu"
-import MicrophoneSection from "./microfone"
+import MicrophoneSection from "./MicrophoneSection"
 
 type User = {
   name: string
