@@ -18,7 +18,6 @@ export default function VoiceAssistant() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
 
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userData = localStorage.getItem("user")
@@ -43,26 +42,23 @@ export default function VoiceAssistant() {
     router.push("/register")
   }
 
-  if (!user) {
-    return null 
-  }
+  if (!user) return null
 
   return (
-    <div className="assistant-container">
-     
-      {isMenuOpen && <SideMenu user={user} onClose={toggleMenu} onLogout={handleLogout} />}
+    <div className="flex flex-col h-screen bg-gray-100 relative overflow-hidden">
+      {isMenuOpen && (
+        <SideMenu user={user} onClose={toggleMenu} onLogout={handleLogout} />
+      )}
 
-     
       <TopNav user={user} isMuted={isMuted} onMenuClick={toggleMenu} onMuteClick={toggleMute} />
 
-      
-      <div className="main-content">
+      <div className="flex-1 flex items-center justify-center">
         <MicrophoneSection />
       </div>
 
-      
-      <div className="footer">Copyright © 2024 - JEF</div>
+      <footer className="p-4 text-center text-sm text-gray-500">
+        Copyright © 2024 - JEF
+      </footer>
     </div>
   )
 }
-

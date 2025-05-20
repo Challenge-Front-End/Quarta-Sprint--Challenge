@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
@@ -29,19 +27,19 @@ export default function RegistrationForm() {
     const newErrors: Record<string, string> = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required"
+      newErrors.name = "Nome é obrigatório"
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
+      newErrors.email = "Email é obrigatório"
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid"
+      newErrors.email = "Email inválido"
     }
 
     if (!formData.password.trim()) {
-      newErrors.password = "Password is required"
+      newErrors.password = "Senha é obrigatória"
     } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters"
+      newErrors.password = "Mínimo de 6 caracteres"
     }
 
     setErrors(newErrors)
@@ -52,7 +50,6 @@ export default function RegistrationForm() {
     e.preventDefault()
 
     if (validateForm()) {
-     
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -61,20 +58,20 @@ export default function RegistrationForm() {
           hasDisability: formData.hasDisability,
         }),
       )
-
-     
       router.push("/assistant")
     }
   }
 
   return (
-    <div className="register-container">
-      <div className="register-form-container">
-        <h1 className="register-title">Crie sua conta</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 className="text-2xl font-bold text-center text-red-700 mb-6">
+          Crie sua conta
+        </h1>
 
-        <form onSubmit={handleSubmit} className="register-form">
-          <div className="form-group">
-            <label htmlFor="name" className="form-label">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
               Nome completo
             </label>
             <input
@@ -83,18 +80,13 @@ export default function RegistrationForm() {
               type="text"
               value={formData.name}
               onChange={handleChange}
-              className="form-input"
-              aria-describedby={errors.name ? "name-error" : undefined}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
             />
-            {errors.name && (
-              <p id="name-error" className="form-error">
-                {errors.name}
-              </p>
-            )}
+            {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
             </label>
             <input
@@ -103,18 +95,13 @@ export default function RegistrationForm() {
               type="email"
               value={formData.email}
               onChange={handleChange}
-              className="form-input"
-              aria-describedby={errors.email ? "email-error" : undefined}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
             />
-            {errors.email && (
-              <p id="email-error" className="form-error">
-                {errors.email}
-              </p>
-            )}
+            {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Senha
             </label>
             <input
@@ -123,31 +110,29 @@ export default function RegistrationForm() {
               type="password"
               value={formData.password}
               onChange={handleChange}
-              className="form-input"
-              aria-describedby={errors.password ? "password-error" : undefined}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
             />
-            {errors.password && (
-              <p id="password-error" className="form-error">
-                {errors.password}
-              </p>
-            )}
+            {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
           </div>
 
-          <div className="form-checkbox-group">
+          <div className="flex items-center space-x-2">
             <input
               id="hasDisability"
               name="hasDisability"
               type="checkbox"
               checked={formData.hasDisability}
               onChange={handleChange}
-              className="form-checkbox"
+              className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
             />
-            <label htmlFor="hasDisability" className="form-checkbox-label">
-            Tenho uma deficiência e posso precisar de recursos de acessibilidade
+            <label htmlFor="hasDisability" className="text-sm text-gray-700">
+              Tenho uma deficiência e posso precisar de recursos de acessibilidade
             </label>
           </div>
 
-          <button type="submit" className="register-button">
+          <button
+            type="submit"
+            className="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-md transition-colors duration-200"
+          >
             Registrar
           </button>
         </form>
@@ -155,4 +140,3 @@ export default function RegistrationForm() {
     </div>
   )
 }
-
