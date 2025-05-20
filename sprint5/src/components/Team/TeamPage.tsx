@@ -8,6 +8,7 @@ import Image from "next/image"
 import joaoImage from "../../img/joao.jpg"
 import felipeImage from "../../img/felipe.png"
 import enzoImage from "../../img/enzo.png"
+import Loading from "@/app/loading"
 
 type User = {
   name: string
@@ -62,7 +63,7 @@ export default function TeamPage() {
     router.push("/assistant")
   }
 
-  if (!user) return null
+  if (!user) return <Loading />
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

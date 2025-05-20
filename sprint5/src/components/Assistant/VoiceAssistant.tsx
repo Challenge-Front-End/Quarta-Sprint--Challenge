@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import TopNav from "./TopNav"
 import SideMenu from "./Sidemenu"
 import MicrophoneSection from "./MicrophoneSection"
+import Loading from "@/app/loading"
 
 type User = {
   name: string
@@ -42,7 +43,7 @@ export default function VoiceAssistant() {
     router.push("/register")
   }
 
-  if (!user) return null
+  if (!user) return <Loading />
 
   return (
     <div className="flex flex-col h-screen bg-gray-100 relative overflow-hidden">
