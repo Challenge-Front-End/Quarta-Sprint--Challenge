@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import TopNav from "./TopNav"
 import SideMenu from "./Sidemenu"
 import { Mic } from "lucide-react"
-import { speakText } from "../../lib/speak"
+import { speakText, stopSpeaking } from "../../lib/speak"
 import Loading from "@/app/loading"
 import { askOpenRouter } from "@/lib/askOpenRouter"
 
@@ -28,6 +28,7 @@ export default function VoiceAssistant() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [isListening, setIsListening] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
   const [message, setMessage] = useState("")
   const [response, setResponse] = useState("")
   const [loading, setLoading] = useState(false)
@@ -59,7 +60,7 @@ export default function VoiceAssistant() {
       const reply = await askOpenRouter(text)
       setResponse(reply)
       if (!isMuted) {
-        speakText(reply)
+        speakText(reply, () => setIsSpeaking(true), () => setIsSpeaking(false))
       }
     } catch (err) {
       console.error(err)
@@ -82,11 +83,10 @@ export default function VoiceAssistant() {
     recognition.onstart = () => setIsListening(true)
     recognition.onend = () => setIsListening(false)
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-        console.error("Erro no reconhecimento:", event);
-        alert('Erro ao acessar o microfone.');
-        setIsListening(false);
-    };
-
+      console.error("Erro no reconhecimento:", event)
+      alert("Erro ao acessar o microfone.")
+      setIsListening(false)
+    }
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript
@@ -110,10 +110,14 @@ export default function VoiceAssistant() {
         <SideMenu user={user} onClose={toggleMenu} onLogout={handleLogout} />
       )}
 
-      <TopNav user={user} isMuted={isMuted} onMenuClick={toggleMenu} onMuteClick={toggleMute} />
+      <TopNav
+        user={user}
+        isMuted={isMuted}
+        onMenuClick={toggleMenu}
+        onMuteClick={toggleMute}
+      />
 
       <div className="flex-1 flex flex-col items-center justify-center gap-6 px-4">
-        {/* Microfone */}
         <button
           onClick={handleVoiceInput}
           className={`w-24 h-24 rounded-full flex items-center justify-center border-4 ${
@@ -121,10 +125,13 @@ export default function VoiceAssistant() {
           } bg-white shadow-md transition-colors duration-300`}
           aria-label="Microfone"
         >
-          <Mic className={`w-12 h-12 ${isListening ? "text-red-600" : "text-gray-800"}`} />
+          <Mic
+            className={`w-12 h-12 ${
+              isListening ? "text-red-600" : "text-gray-800"
+            }`}
+          />
         </button>
 
-        {/* Entrada manual */}
         <div className="w-full max-w-xl">
           <input
             type="text"
@@ -146,6 +153,18 @@ export default function VoiceAssistant() {
           <div className="mt-2 text-center text-gray-800 bg-white p-4 rounded-md shadow-md max-w-xl w-full max-h-96 overflow-y-auto">
             <p className="font-semibold mb-2">Resposta da IA:</p>
             <p className="text-left whitespace-pre-line">{response}</p>
+
+            {isSpeaking && (
+              <button
+                onClick={() => {
+                  stopSpeaking()
+                  setIsSpeaking(false)
+                }}
+                className="mt-2 px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded shadow"
+              >
+                Parar voz
+              </button>
+            )}
           </div>
         )}
       </div>
