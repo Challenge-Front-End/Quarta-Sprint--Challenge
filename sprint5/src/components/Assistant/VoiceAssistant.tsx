@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import TopNav from "./TopNav"
 import SideMenu from "./Sidemenu"
 import { Mic } from "lucide-react"
+import TopNav from "./TopNav"
 import { speakText, stopSpeaking } from "../../lib/speak"
 import Loading from "@/app/loading"
 import { askOpenRouter } from "@/lib/askOpenRouter"
@@ -15,10 +15,11 @@ type User = {
   hasDisability: boolean
 }
 
-const SpeechRecognition =
+const SpeechRecognition: typeof window.SpeechRecognition | null =
   typeof window !== "undefined"
-    ? ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
+    ? window.SpeechRecognition || window.webkitSpeechRecognition
     : null
+
 
 const recognition = SpeechRecognition ? new SpeechRecognition() : null
 

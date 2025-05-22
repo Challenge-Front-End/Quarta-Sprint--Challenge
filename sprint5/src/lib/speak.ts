@@ -1,4 +1,3 @@
-let currentUtterance: SpeechSynthesisUtterance | null = null
 
 export function speakText(
   text: string,
@@ -18,7 +17,6 @@ export function speakText(
   if (onStart) utterance.onstart = onStart
   if (onEnd) utterance.onend = onEnd
 
-  currentUtterance = utterance
   window.speechSynthesis.speak(utterance)
 }
 
