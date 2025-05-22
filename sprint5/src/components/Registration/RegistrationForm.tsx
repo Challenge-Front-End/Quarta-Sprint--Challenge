@@ -46,21 +46,61 @@ export default function RegistrationForm() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
 
-    if (validateForm()) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          hasDisability: formData.hasDisability,
-        }),
-      )
-      router.push("/assistant")
+  if (!validateForm()) return
+
+  try {
+    const res = await fetch("https://quarkussprint4java-production.up.railway.app/usuarios", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nome: formData.name,
+        email: formData.email,
+        senha: formData.password,
+        preferenciasAcessibilidade: formData.hasDisability ? "sim" : "não",
+        dataCadastro: new Date().toISOString(),
+        ultimoAcesso: new Date().toISOString(),
+      }),
+    })
+
+    if (!res.ok) {
+      throw new Error("Erro ao cadastrar usuário")
     }
+
+    const lista = await fetch("https://quarkussprint4java-production.up.railway.app/usuarios")
+    const usuarios = await lista.json()
+    type Usuario = {
+      id: number
+      nome: string
+      email: string
+      senha?: string
+      preferenciasAcessibilidade?: string
+    }
+
+const usuario = (usuarios as Usuario[]).find((u) => u.email === formData.email)
+
+
+    if (!usuario) throw new Error("Usuário não encontrado após cadastro")
+
+    localStorage.setItem("user", JSON.stringify({
+      id: usuario.id,
+      name: usuario.nome,
+      email: usuario.email,
+      hasDisability: usuario.preferenciasAcessibilidade === "sim",
+    }))
+
+    router.push("/assistant")
+
+  } catch (error) {
+    console.error(error)
+    alert("Erro ao registrar usuário.")
   }
+}
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
