@@ -1,4 +1,4 @@
-const BASE_URL = "https://quarkussprint4java-production.up.railway.app";
+const BASE_URL = "https://quarkussprint4java.onrender.com";
 
 export async function buscarUsuario(id: number) {
   const res = await fetch(`${BASE_URL}/usuarios/${id}`);
